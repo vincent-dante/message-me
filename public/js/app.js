@@ -2011,10 +2011,12 @@ var app = new Vue({
   el: '#app',
   data: {
     userList: [],
-    messages: []
+    messages: [],
+    userRecipient: null
   },
   created: function created() {
     this.getUserList();
+    this.getMessages();
   },
   methods: {
     getUserList: function getUserList() {
@@ -2025,18 +2027,23 @@ var app = new Vue({
       });
     },
     getMessages: function getMessages(id) {
+      var _this2 = this;
+
+      this.userRecipient = id;
       axios.get('/getmessages/' + id).then(function (response) {
-        console.log(response.data);
+        _this2.messages = response.data;
       });
-      /*       console.log(response.data); */
     },
     addMessage: function addMessage(message) {
       this.messages.push({
         message: message
       });
-      /*       axios.post('/sendmessages', message).then(response => {
-              console.log(response.data);
-            }); */
+      axios.post('/sendmessages', {
+        message: message,
+        recipient: this.userRecipient
+      }).then(function (response) {
+        console.log(response.data);
+      });
     }
   }
 });

@@ -55,7 +55,14 @@ class MessageController extends Controller
       /* 
        * messages() method in the User.php
        */
-/*       $message = $user->messages()->create([
+      $message = new Message;
+			$message->user_id = $user->id;
+			$message->receiver_id = $request->recipient;
+      $message->message = $request->message;
+      $message->save();
+
+
+/*       $message = $user->create([
         'message' => $request->input('message')
       ]);
     

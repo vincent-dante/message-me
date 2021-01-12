@@ -35,10 +35,12 @@ const app = new Vue({
     el: '#app',
     data: {
       userList: [],
-      messages: []
+      messages: [],
+      userRecipient: null
     },
     created() {
       this.getUserList();
+      this.getMessages();
    },
    methods: {
     getUserList(){
@@ -47,19 +49,22 @@ const app = new Vue({
       });
     },
     getMessages(id) {
+      this.userRecipient = id;
       axios.get('/getmessages/'+id).then(response => {
-          console.log(response.data);
+        this.messages = response.data;
       });
-/*       console.log(response.data); */
     },
     addMessage(message) {
       this.messages.push({ 
         message: message
       });
 
-/*       axios.post('/sendmessages', message).then(response => {
+      axios.post('/sendmessages', {
+        message: message,
+        recipient: this.userRecipient
+      }).then(response => {
         console.log(response.data);
-      }); */
+      });
 
     }
 
