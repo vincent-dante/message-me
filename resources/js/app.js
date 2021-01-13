@@ -73,6 +73,11 @@ const app = new Vue({
       });
     },
     addMessage(message) {
+      if( this.userRecipient === null ){
+        alert("Select User Please!");
+        return;
+      }
+
       this.messages.push({ 
         message: message,
         receiver_id: this.userRecipient
