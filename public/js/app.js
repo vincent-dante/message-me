@@ -1906,39 +1906,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['messages']
+  props: ['messages', 'currentuser']
 });
 
 /***/ }),
@@ -2012,11 +1981,13 @@ var app = new Vue({
   data: {
     userList: [],
     messages: [],
-    userRecipient: null
+    userRecipient: null,
+    processing: false,
+    currentUser: null
   },
   created: function created() {
     this.getUserList();
-    this.getMessages();
+    this.getCurrentUser(); //this.getMessages();
   },
   methods: {
     getUserList: function getUserList() {
@@ -2026,17 +1997,34 @@ var app = new Vue({
         _this.userList = response.data;
       });
     },
-    getMessages: function getMessages(id) {
+    getCurrentUser: function getCurrentUser() {
       var _this2 = this;
 
+      axios.get('/getcurrentuser').then(function (response) {
+        _this2.currentUser = response.data;
+      });
+    },
+    getMessages: function getMessages(id) {
+      var _this3 = this;
+
+      // terminate the function
+      // if an async request is processing      
+      if (this.processing === true) {
+        return;
+      } // set the async state
+
+
+      this.processing = true;
       this.userRecipient = id;
       axios.get('/getmessages/' + id).then(function (response) {
-        _this2.messages = response.data;
+        _this3.messages = response.data;
+        _this3.processing = false;
       });
     },
     addMessage: function addMessage(message) {
       this.messages.push({
-        message: message
+        message: message,
+        receiver_id: this.userRecipient
       });
       axios.post('/sendmessages', {
         message: message,
@@ -37719,15 +37707,29 @@ var render = function() {
       { staticClass: "list-group list-group-flush" },
       _vm._l(_vm.messages, function(msg) {
         return _c("li", { key: msg.id, staticClass: "list-group-item" }, [
-          _c("img", {
-            staticClass: "img-fluid",
-            staticStyle: { width: "80px", "border-radius": "50%" },
-            attrs: {
-              src:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU"
-            }
-          }),
-          _vm._v("\n        " + _vm._s(msg.message) + "\n      ")
+          _vm.currentuser == msg.user_id || _vm.currentuser != msg.receiver_id
+            ? _c("div", [
+                _c("img", {
+                  staticClass: "img-fluid",
+                  staticStyle: { width: "80px", "border-radius": "50%" },
+                  attrs: {
+                    src:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU"
+                  }
+                }),
+                _vm._v("\n        " + _vm._s(msg.message) + "\n      ")
+              ])
+            : _c("div", { staticClass: "text-right" }, [
+                _vm._v("\n        " + _vm._s(msg.message) + "\n        "),
+                _c("img", {
+                  staticClass: "img-fluid",
+                  staticStyle: { width: "80px", "border-radius": "50%" },
+                  attrs: {
+                    src:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU"
+                  }
+                })
+              ])
         ])
       }),
       0

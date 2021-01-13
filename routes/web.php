@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'MessageController@index');
 Route::get('/getusers', 'UserController@getUsers');
+Route::get('/getcurrentuser', 'UserController@getCurrentUser');
+
+
+
 Route::get('/getmessages/{id}', 'MessageController@getMessage');
 Route::post('/sendmessages', 'MessageController@sendMessage');
 

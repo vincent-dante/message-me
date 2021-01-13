@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
@@ -37,7 +38,10 @@ class MessageController extends Controller
 		*/
     public function getMessage($id){
       $user = Auth::user();
-      return Message::where('receiver_id', $id)->where('user_id', $user->id)->get();
+      //return Message::where('receiver_id', $id)->where('user_id', $user->id)->where('receiver_id', $user->id)->where('user_id', $id)->get();
+      $result = DB::select('select * from messages msg where (msg.user_id = ? AND msg.receiver_id = ?) OR (msg.receiver_id = ? AND msg.user_id = ?)',[$user->id, $id, $user->id, $id]);
+      //$result = DB::select('select * from messages msg where msg.user_id = ? AND msg.receiver_id = ?',[$user->id, $id]);
+      return $result;
     }
 
 

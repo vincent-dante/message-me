@@ -19,8 +19,8 @@
           <div class="card-header">
             Message
           </div>
-          <div class="card-body">
-            <chat-messages :messages="messages"></chat-messages>
+          <div class="card-body body-messages">
+            <chat-messages :messages="messages" :currentuser="currentUser"></chat-messages>
           </div>
           <div class="card-footer">
             <chat-form></chat-form>

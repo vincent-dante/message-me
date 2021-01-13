@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -21,4 +22,11 @@ class UserController extends Controller
       $users = User::where('id', '!=', auth()->id())->get();
 			return response()->json($users);
     }    
+
+    public function getCurrentUser()
+    {
+      $user = Auth::user();
+      return $user->id;
+    }    
+
 }

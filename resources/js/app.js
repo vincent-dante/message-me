@@ -36,11 +36,14 @@ const app = new Vue({
     data: {
       userList: [],
       messages: [],
-      userRecipient: null
+      userRecipient: null,
+      processing: false,
+      currentUser: null
     },
     created() {
       this.getUserList();
-      this.getMessages();
+      this.getCurrentUser();
+      //this.getMessages();
    },
    methods: {
     getUserList(){
@@ -48,15 +51,31 @@ const app = new Vue({
         this.userList = response.data;
       });
     },
+    getCurrentUser(){
+      axios.get('/getcurrentuser').then(response => {
+        this.currentUser = response.data;
+      });
+    },
     getMessages(id) {
+      // terminate the function
+      // if an async request is processing      
+      if (this.processing === true) {
+        return;
+      } 
+
+      // set the async state
+      this.processing = true;
+
       this.userRecipient = id;
       axios.get('/getmessages/'+id).then(response => {
         this.messages = response.data;
+        this.processing = false;
       });
     },
     addMessage(message) {
       this.messages.push({ 
-        message: message
+        message: message,
+        receiver_id: this.userRecipient
       });
 
       axios.post('/sendmessages', {
