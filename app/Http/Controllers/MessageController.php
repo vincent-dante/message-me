@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Events\MessageSent;
 
 class MessageController extends Controller
 {
@@ -68,9 +69,9 @@ class MessageController extends Controller
 
 /*       $message = $user->create([
         'message' => $request->input('message')
-      ]);
+      ]); */
     
-      broadcast(new MessageSent($user, $message))->toOthers(); */
+      broadcast(new MessageSent($user, $message))->toOthers();
     
       return ['status' => 'Message Sent!'];
     }

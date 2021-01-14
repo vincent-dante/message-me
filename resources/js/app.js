@@ -44,6 +44,16 @@ const app = new Vue({
       this.getUserList();
       this.getCurrentUser();
       //this.getMessages();
+
+      Echo.private('chat')
+      .listen('MessageSent', (e) => {
+        this.messages.push({
+          message: e.message.message,
+          //user: e.user,
+          user: e.user
+        });
+      });
+
    },
    methods: {
     getUserList(){
