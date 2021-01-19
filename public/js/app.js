@@ -1913,11 +1913,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['messages', 'currentuser']
+  props: ['messages', 'currentuser', 'images', 'userrecipient']
 });
 
 /***/ }),
@@ -1993,7 +1990,8 @@ var app = new Vue({
     messages: [],
     userRecipient: null,
     processing: false,
-    currentUser: null
+    currentUser: null,
+    images: ['', 'https://i.pinimg.com/474x/50/70/10/5070101ae7cc267a1ba03d30abdd38e9.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU']
   },
   created: function created() {
     var _this = this;
@@ -2004,8 +2002,8 @@ var app = new Vue({
     Echo["private"]('chat').listen('MessageSent', function (e) {
       _this.messages.push({
         message: e.message.message,
-        //user: e.user,
-        user: e.user
+        receiver_id: e.message.receiver_id,
+        user_id: e.message.user_id
       });
     });
   },
@@ -43851,7 +43849,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.messages.length
+      _vm.messages.length && _vm.userrecipient != null
         ? _c("transition", { attrs: { name: "fade" } }, [
             _c(
               "ul",
@@ -43870,10 +43868,7 @@ var render = function() {
                               width: "80px",
                               "border-radius": "50%"
                             },
-                            attrs: {
-                              src:
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU"
-                            }
+                            attrs: { src: _vm.images[_vm.currentuser] }
                           }),
                           _vm._v(
                             "\n          " + _vm._s(msg.message) + "\n        "
@@ -43891,10 +43886,7 @@ var render = function() {
                               width: "80px",
                               "border-radius": "50%"
                             },
-                            attrs: {
-                              src:
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU"
-                            }
+                            attrs: { src: _vm.images[msg.user_id] }
                           })
                         ])
                   ]

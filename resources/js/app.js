@@ -38,7 +38,12 @@ const app = new Vue({
       messages: [],
       userRecipient: null,
       processing: false,
-      currentUser: null
+      currentUser: null,
+      images: [
+        '',
+        'https://i.pinimg.com/474x/50/70/10/5070101ae7cc267a1ba03d30abdd38e9.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_6ApafLprzpriMbdwireN03VbY--OTYcXg&usqp=CAU',
+      ]
     },
     created() {
       this.getUserList();
@@ -49,8 +54,8 @@ const app = new Vue({
       .listen('MessageSent', (e) => {
         this.messages.push({
           message: e.message.message,
-          //user: e.user,
-          user: e.user
+          receiver_id: e.message.receiver_id,
+          user_id: e.message.user_id
         });
       });
 

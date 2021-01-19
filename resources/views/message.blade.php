@@ -20,7 +20,7 @@
             Message
           </div>
           <div class="card-body body-messages">
-            <chat-messages :messages="messages" :currentuser="currentUser"></chat-messages>
+            <chat-messages :messages="messages" :currentuser="currentUser" :images="images" :userrecipient="userRecipient"></chat-messages>
           </div>
           <div class="card-footer">
             <chat-form></chat-form>
